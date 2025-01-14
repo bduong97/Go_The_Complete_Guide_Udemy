@@ -10,16 +10,16 @@ import (
 )
 
 type Note struct {
-	Title     string
-	Content   string
-	CreatedAt time.Time
+	Title     string    `json:"title"`
+	Content   string    `json:"content"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 func (note Note) Save() error {
 	fileName := strings.ReplaceAll(note.Title, " ", "_")
 	fileName = strings.ToLower(fileName) + ".json"
 
-	json, err:= json.Marshal(note) //struct fields need to be capitalized in order to be marshalled by external package
+	json, err := json.Marshal(note) //struct fields need to be capitalized in order to be marshalled by external package
 	if err != nil {
 		return err
 	}
