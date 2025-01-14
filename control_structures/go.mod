@@ -1,3 +1,3 @@
-module bank
+module example.com/bank
 
 go 1.22.1
