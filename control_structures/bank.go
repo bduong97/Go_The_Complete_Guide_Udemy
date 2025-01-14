@@ -10,25 +10,27 @@ import (
 const defaultBalance = 1000.0
 const accountBalanceFile = "balance.txt"
 
-func getBalanceFromFile() (float64, error) {
-	data, err := os.ReadFile(accountBalanceFile)
+func getFloatFromFile(fileName string) (float64, error) {
+	data, err := os.ReadFile(fileName)
 	if err != nil {
-		return defaultBalance, errors.New("failed to find balance file")
+		return defaultBalance, errors.New("failed to find file")
 	}
-	balanceText := string(data)
-	balance, _ := strconv.ParseFloat(balanceText, 64)
+	valueText := string(data)
+	value, _ := strconv.ParseFloat(valueText, 64)
 	if err != nil {
-		return defaultBalance, errors.New("failed to parse stored balance value")
+		return defaultBalance, errors.New("failed to parse stored value")
 	}
-	return balance, nil
+	return value, nil
 }
-func writeBalanceToFile(balance float64) {
-	balanceText := fmt.Sprint(balance) //converting balance to string to write to file
-	os.WriteFile(accountBalanceFile, []byte(balanceText), 0644)
+func writeFloatToFile(value float64, fileName string) {
+	balanceText := fmt.Sprint(value) //converting balance to string to write to file
+	os.WriteFile(fileName, []byte(balanceText), 0644)
 
 }
+
+
 func main() {
-	var accountBalance, err = getBalanceFromFile()
+	var accountBalance, err = getFloatFromFile(accountBalanceFile)
 	if err != nil {
 		fmt.Println("ERROR")
 		fmt.Println(err)
@@ -37,12 +39,7 @@ func main() {
 	}
 	fmt.Println("Welcome to Go Bank!")
 	for { //while loop
-		fmt.Println("What do you want to do?")
-		fmt.Println("1. Check Balance")
-		fmt.Println("2. Deposit money")
-		fmt.Println("3. Withdraw money")
-		fmt.Println("4. Exit")
-
+		presentOptions()
 		var choice int
 		fmt.Print("Your choice: ")
 		fmt.Scan(&choice)
@@ -59,7 +56,7 @@ func main() {
 				continue
 			}
 			accountBalance += depositAmount
-			writeBalanceToFile(accountBalance)
+			writeFloatToFile(accountBalance, accountBalanceFile)
 			fmt.Println("Balance updated! New amount: ", accountBalance)
 		case 3:
 			fmt.Print("Withdrawl amount: ")
@@ -74,7 +71,7 @@ func main() {
 				continue
 			}
 			accountBalance -= withdrawalAmount
-			writeBalanceToFile(accountBalance)
+			writeFloatToFile(accountBalance, accountBalanceFile)
 			fmt.Println("Balance updated! New amount: ", accountBalance)
 		default:
 			fmt.Println("Thanks for choosing our bank")
