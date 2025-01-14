@@ -1,9 +1,7 @@
 package main
 
 import (
-	"errors"
 	"fmt"
-	"time"
 	"example.com/structs/user"
 )
 
@@ -12,13 +10,19 @@ func main() {
 	userFirstName := getUserData("Please enter your first name: ")
 	userLastName := getUserData("Please enter your last name: ")
 	userBirthdate := getUserData("Please enter your birthdate (MM/DD/YYYY): ")
-	appUser, err := user.NewUser(userFirstName, userLastName, userBirthdate)
+	appUser, err := user.New(userFirstName, userLastName, userBirthdate)
 	// ... do something awesome with that gathered data!
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	//outputUserDetails(&appUser)
+	admin := user.NewAdmin("test@example.com", "test123")
+
+	admin.User.OutputUserDetails()
+	admin.User.ClearUserName()
+	admin.User.OutputUserDetails()
+
 	appUser.OutputUserDetails()
 	appUser.ClearUserName()
 	appUser.OutputUserDetails()
