@@ -23,6 +23,7 @@ type outputtable interface {
 }
 
 func main() {
+	printSomething(1)
 	title, content := getNoteData()
 
 	userNote, err := note.New(title, content)
@@ -54,6 +55,16 @@ func main() {
 
 }
 
+func printSomething(value interface {}) {
+	switch value.(type) {
+	case int:
+		fmt.Println("Integer:", value)
+	case float64:
+		fmt.Println("Float:", value)
+	case string:
+		fmt.Println(value)
+	}
+}
 func outputData(data outputtable) error {
 	data.Display()
 	return saveData(data)
