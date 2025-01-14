@@ -1,40 +1,32 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"time"
+	"example.com/structs/user"
 )
 
-type user struct {
-	firstName string
-	lastName string
-	birthDate string
-	age int
-	createdAt time.Time
-}
+
 func main() {
 	userFirstName := getUserData("Please enter your first name: ")
 	userLastName := getUserData("Please enter your last name: ")
 	userBirthdate := getUserData("Please enter your birthdate (MM/DD/YYYY): ")
-	var appUser user
-	appUser = user{
-		firstName: userFirstName,
-		lastName: userLastName,
-		birthDate: userBirthdate,
-		createdAt: time.Now(),
-	}
+	appUser, err := user.NewUser(userFirstName, userLastName, userBirthdate)
 	// ... do something awesome with that gathered data!
-
-	outputUserDetails(&appUser)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	//outputUserDetails(&appUser)
+	appUser.OutputUserDetails()
+	appUser.ClearUserName()
+	appUser.OutputUserDetails()
 }
 
-func outputUserDetails(u *user) {
-	//pointers to structs in go don't need dereferencing
-	fmt.Println(u.firstName, u.lastName, u.birthDate)
-}
 func getUserData(promptText string) string {
 	fmt.Print(promptText)
 	var value string
-	fmt.Scan(&value)
+	fmt.Scanln(&value)
 	return value
 }
