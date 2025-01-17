@@ -1,4 +1,4 @@
-package main
+package done
 
 import "fmt"
 
@@ -27,7 +27,6 @@ func main() {
 	// -------------------
 	// 5
 	question5 := []string{"not sure", "trying"}
-	fmt.Println(question5)
 
 	// -------------------
 	// 6
@@ -51,7 +50,6 @@ func main() {
 		title: "taco",
 		id: "asada",
 	})
-	fmt.Println(products)
 
 }
 
