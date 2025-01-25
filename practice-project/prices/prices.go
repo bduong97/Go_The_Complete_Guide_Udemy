@@ -22,29 +22,23 @@ func (job *TaxIncludedPriceJob) LoadData() {
 	}
 
 	scanner := bufio.NewScanner(file)
-	var lines []string
+	var prices []float64
 	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
+		convertedIntoFloat, err := strconv.ParseFloat(scanner.Text(), 64)
+		if err != nil {
+			fmt.Println("could not parse floats in file")
+			return
+		}
+		prices = append(prices, convertedIntoFloat)
 	}
-	err = scanner.Err()
+	job.InputPrices = prices
+	
+	err = scanner.Err() //once reaching the end of file
 	if err != nil {
 		fmt.Println("reading the file content failed.")
 		fmt.Println(err)
 		file.Close()
 		return
-	}
-
-	prices := make([]float64, len(lines))
-	for lineIndex, line := range lines {
-		floatPrice, err := strconv.ParseFloat(line, 64)
-		if err != nil {
-			fmt.Println("conversion to float failed")
-			fmt.Println(err)
-			file.Close()
-			return
-		}
-		prices[lineIndex] = floatPrice
-		job.InputPrices = prices
 	}
 }
 func (job *TaxIncludedPriceJob) Process() {
