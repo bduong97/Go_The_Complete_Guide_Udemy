@@ -15,34 +15,35 @@ type TaxIncludedPriceJob struct {
 	IOManager         iomanager.IOManager `json:"-"`
 }
 
-func (job *TaxIncludedPriceJob) LoadData() {
+func (job *TaxIncludedPriceJob) LoadData() error{
 
 	prices, err := job.IOManager.ReadLines()
 	if err != nil {
-		fmt.Println(err)
-		return
+		return err
 	}
 
 	job.InputPrices, err = conversion.StringsToFloat(prices)
 	if err != nil {
-		fmt.Println(err)
-		return
+		return err
 	}
-
+	return nil
 }
-func (job *TaxIncludedPriceJob) Process() {
-	job.LoadData()
+func (job *TaxIncludedPriceJob) Process() error{
+	err := job.LoadData()
+	if err != nil {
+		return err
+	}
 	for _, price := range job.InputPrices {
 		taxIncludedPrice := price * (1 + job.TaxRate)
 		finalPrice, err := strconv.ParseFloat(fmt.Sprintf("%.2f", taxIncludedPrice), 64)
 		if err != nil {
 			fmt.Println("can't convert string to float")
-			return
+			return err
 		}
 		job.TaxIncludedPrices[fmt.Sprintf("%.2f", price)] = finalPrice
 	}
 
-	job.IOManager.WriteResult(job)
+	return job.IOManager.WriteResult(job)
 }
 
 func NewTaxIncludedPriceJob(iom iomanager.IOManager, taxRate float64) *TaxIncludedPriceJob {
