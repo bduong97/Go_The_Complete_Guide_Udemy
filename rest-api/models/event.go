@@ -2,6 +2,7 @@ package models
 
 import (
 	"time"
+
 	"example.com/rest-api/db"
 )
 
@@ -17,7 +18,7 @@ type Event struct {
 
 var events []Event = []Event{}
 
-func (e Event) Save() error {
+func (e *Event) Save() error {
 	// TODO: add  it to a database
 	query := `INSERT INTO events(name, description, location, dateTime, user_id) 
 	VALUES(?, ?, ?, ?, ?)` //question mark notation protects against sequel injection attacks
@@ -35,6 +36,32 @@ func (e Event) Save() error {
 	return err 
 }
 
-func GetAllEvents() []Event {
-	return events
+func GetAllEvents() ([]Event, error) {
+	query := "SELECT * FROM events"
+	rows, err := db.DB.Query(query) //if only fetch data, use query, if updating data, use exec
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var events [] Event
+	for rows.Next() {
+		var event Event
+		err := rows.Scan(&event.ID, &event.Name, &event.Description, &event.Location, &event.DateTime, &event.UserID)
+		if err != nil {
+			return nil, err
+		}
+		events = append(events, event)
+	}
+	return events, nil
+}
+
+func GetEventByID(id int64) (*Event, error) {
+	query := "SELECT * FROM events WHERE id = ?"
+	row := db.DB.QueryRow(query, id) //returns only 1 row
+	var event Event
+	err := row.Scan(&event.ID, &event.Name, &event.Description, &event.Location, &event.DateTime, &event.UserID)
+	if err != nil {
+		return nil, err
+	}
+	return &event, nil
 }
