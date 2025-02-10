@@ -7,4 +7,5 @@ func RegisterRoutes(server *gin.Engine) {
 	server.GET("/events/:id", getEvent) // /events/1, /events/5
 	server.POST("/events", createEvent) //event functions are available because they're in the same package
 	server.PUT("/events/:id", updateEvent)
+	server.DELETE("/events/:id", deleteEvent)
 }
