@@ -26,7 +26,7 @@ func VerifyToken(token string) error{
 			return nil, errors.New("Unexpected signing method")
 		}
 
-		return secretKey, nil
+		return []byte(secretKey), nil
 		//returns secret key that is used by the jwt library parse function
 	})
 
@@ -34,7 +34,11 @@ func VerifyToken(token string) error{
 		return errors.New("Could not parse token.")
 	}
 
-	tokenIsValid := parsedToken.Valid
+	if !parsedToken.Valid {
+		return errors.New("Token is not valid")
+
+	}
+	return nil
 	// if !tokenIsValid {
 	// 	return errors.New("Token is not valid")
 	// }
@@ -44,5 +48,4 @@ func VerifyToken(token string) error{
 	// }
 	// email :=	claims["email"].(string)
 	// userId :=	claims["userId"].(int64)
-	return nil
 }
