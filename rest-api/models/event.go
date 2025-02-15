@@ -13,7 +13,7 @@ type Event struct {
 	Description string    `binding:"required"`
 	Location    string    `binding:"required"`
 	DateTime    time.Time `binding:"required"`
-	UserID      int
+	UserID      int64
 }
 
 var events []Event = []Event{}
@@ -31,8 +31,7 @@ func (e *Event) Save() error {
 	if err != nil {
 		return err
 	}
-	id, err := result.LastInsertId()
-	e.ID = id
+	e.ID, err = result.LastInsertId()
 	return err 
 }
 

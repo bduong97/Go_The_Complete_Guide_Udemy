@@ -17,7 +17,7 @@ func GenerateToken(email string, userId int64) (string, error) {
 	return token.SignedString([]byte(secretKey))
 }
 
-func VerifyToken(token string) error{
+func VerifyToken(token string) (jwt.MapClaims, error) {
 	//jwt.Parse is used to check, with the anonymous key func, that the input token
 	// was signed using the signing method that we specified when generating the token
 	parsedToken, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
@@ -31,21 +31,20 @@ func VerifyToken(token string) error{
 	})
 
 	if err != nil {
-		return errors.New("Could not parse token.")
+		return nil, errors.New("Could not parse token.")
 	}
 
 	if !parsedToken.Valid {
-		return errors.New("Token is not valid")
+		return nil, errors.New("Token is not valid")
 
 	}
-	return nil
-	// if !tokenIsValid {
-	// 	return errors.New("Token is not valid")
-	// }
-	// claims, ok :=	parsedToken.Claims.(jwt.MapClaims) //type checking syntax, checks if Claims if of type jwt.MapClaims
-	// if !ok {
-	// 	return errors.New("Invalid token claims")
-	// }
-	// email :=	claims["email"].(string)
-	// userId :=	claims["userId"].(int64)
+	if !parsedToken.Valid {
+		return nil, errors.New("Token is not valid")
+	}
+	
+	claims, ok :=	parsedToken.Claims.(jwt.MapClaims) //type checking syntax, checks if Claims if of type jwt.MapClaims
+	if !ok {
+		return nil, errors.New("Invalid token claims")
+	}
+	return claims, nil
 }
