@@ -36,6 +36,7 @@ func getEvents(context *gin.Context) {
 }
 
 func createEvent(context *gin.Context) {
+	context.Request.Header.Get("Authorization")
 	var event models.Event                //empty struct
 	err := context.ShouldBindJSON(&event) //storing body of request into variable
 	if err != nil {
