@@ -35,14 +35,14 @@ func VerifyToken(token string) error{
 	}
 
 	tokenIsValid := parsedToken.Valid
-	if !tokenIsValid {
-		return errors.New("Token is not valid")
-	}
-	claims, ok :=	parsedToken.Claims.(jwt.MapClaims) //type checking syntax, checks if Claims if of type jwt.MapClaims
-	if !ok {
-		return errors.New("Invalid token claims")
-	}
-	email :=	claims["email"].(string)
-	userId :=	claims["userId"].(int64)
+	// if !tokenIsValid {
+	// 	return errors.New("Token is not valid")
+	// }
+	// claims, ok :=	parsedToken.Claims.(jwt.MapClaims) //type checking syntax, checks if Claims if of type jwt.MapClaims
+	// if !ok {
+	// 	return errors.New("Invalid token claims")
+	// }
+	// email :=	claims["email"].(string)
+	// userId :=	claims["userId"].(int64)
 	return nil
 }
