@@ -14,6 +14,8 @@ func RegisterRoutes(server *gin.Engine) {
 	authenticated.POST("/events", createEvent) //event functions are available because they're in the same package
 	authenticated.PUT("/events/:id", updateEvent)
 	authenticated.DELETE("/events/:id", deleteEvent)
+	authenticated.POST("/events/:id/register", registerForEvent)
+	authenticated.DELETE("/events/:id/register", cancelRegistration)
 
 	server.POST("/signup", signup)
 	server.POST("/login", login)
