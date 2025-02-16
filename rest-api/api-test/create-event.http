@@ -3,7 +3,7 @@ Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJyYW5kb25AZXhhbXBsZS5jb20iLCJleHAiOjE3Mzk3MzY3OTEsInVzZXJJZCI6Mn0.clRG_1J3m6N89WNLyBbQlu210wmgWgWYTSci8J1KZgY
 
 {
-  "name": "Test event feb164",
+  "name": "Test event bduong again",
   "description": "A test event",
   "location": "A test location",
   "dateTime": "2025-01-01T15:30:30.000Z"

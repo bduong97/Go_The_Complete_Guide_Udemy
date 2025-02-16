@@ -54,6 +54,7 @@ func createEvent(context *gin.Context) {
 }
 
 func updateEvent(context *gin.Context) {
+	claims := context.GetStringMap("claims")
 	eventID, err := strconv.ParseInt(context.Param("id"), 10, 64)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"message": "Could not parse event ID"})
@@ -61,7 +62,14 @@ func updateEvent(context *gin.Context) {
 		return
 	}
 
-	_, err = models.GetEventByID(eventID)
+	//logic for comparing userID to eventID
+	fetchedEvent, err := models.GetEventByID(eventID)
+	UserID := int64(claims["userId"].(float64))
+	if UserID != fetchedEvent.UserID {
+		context.JSON(http.StatusUnauthorized, gin.H{"message": "User is not authorized to update event"})
+		return
+	}
+
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "Could not fetch event, Try again later"})
 		fmt.Println(err)
